@@ -1,0 +1,7 @@
+name: AtomSpells
+version: 1.0.0
+main: com.github.atomishere.atomspells.AtomSpells
+description: A plugin about casting spells
+author: AtomIsHere
+website: https://github.com/AtomIsHere
+api-version: '1.21.4'
