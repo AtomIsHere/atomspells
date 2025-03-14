@@ -102,7 +102,9 @@ public class WandManager implements Listener {
             if(clicks.size() == 3) {
                 byte spellTag = convertToSpellTag(clicks);
                 player.sendMessage("Spell tag: " + spellTag);
-                // TODO: Cast Spell
+
+                plugin.getSpellRegistry().getSpell(spellTag).ifPresent(spell -> spell.performSpell(player));
+
                 clicks.clear();
             }
         }
