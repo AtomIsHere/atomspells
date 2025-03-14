@@ -58,6 +58,8 @@ public class WandManager implements Listener {
             timeouts.get(playerUUID).cancel();
         }
 
+        player.playSound(player.getLocation(), "block.lever.click", 1, 1);
+
         casts.computeIfAbsent(playerUUID, k -> new ArrayList<>()).add(click);
         displayClicks(player);
         timeouts.put(player.getUniqueId(), Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> casts.get(playerUUID).clear(), 20));
