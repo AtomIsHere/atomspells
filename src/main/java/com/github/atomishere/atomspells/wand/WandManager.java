@@ -4,16 +4,13 @@ import com.github.atomishere.atomspells.AtomSpells;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -83,7 +80,7 @@ public class WandManager implements Listener {
             message.append(Component.text("<> "));
         }
 
-        player.sendActionBar(message.build());
+        plugin.getActionHud().sendMessage(player, message.build(), 20);
     }
 
     @EventHandler
