@@ -1,5 +1,6 @@
 package com.github.atomishere.atomspells;
 
+import com.github.atomishere.atomspells.spells.HealingSpell;
 import com.github.atomishere.atomspells.spells.SpellRegistry;
 import com.github.atomishere.atomspells.spells.WandManager;
 import com.github.atomishere.atomspells.spells.ExplosionSpell;
@@ -19,6 +20,10 @@ public class AtomSpells extends JavaPlugin {
     private BukkitTask manaTask;
     private BukkitTask actionHudTask;
 
+    public ManaManager getManaManager() {
+        return manaManager;
+    }
+
     public SpellRegistry getSpellRegistry() {
         return spellRegistry;
     }
@@ -30,6 +35,7 @@ public class AtomSpells extends JavaPlugin {
     @Override
     public void onEnable() {
         spellRegistry.registerSpell((byte) 0x0, new ExplosionSpell(manaManager));
+        spellRegistry.registerSpell((byte) 0x1, new HealingSpell(this));
         actionHud.addElement(player -> Component.text("★ Mana: ")
                 .append(Component.text(Math.round(manaManager.getMana(player))))
                 .append(Component.text("/"))
