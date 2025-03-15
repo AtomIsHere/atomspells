@@ -1,8 +1,8 @@
 package com.github.atomishere.atomspells;
 
-import com.github.atomishere.atomspells.wand.SpellRegistry;
-import com.github.atomishere.atomspells.wand.WandManager;
-import com.github.atomishere.atomspells.wand.spells.ExplosionSpell;
+import com.github.atomishere.atomspells.spells.SpellRegistry;
+import com.github.atomishere.atomspells.spells.WandManager;
+import com.github.atomishere.atomspells.spells.ExplosionSpell;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;

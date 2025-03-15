@@ -1,8 +1,7 @@
-package com.github.atomishere.atomspells.wand.spells;
+package com.github.atomishere.atomspells.spells;
 
 import com.github.atomishere.atomspells.ManaManager;
 import com.github.atomishere.atomspells.RayCaster;
-import com.github.atomishere.atomspells.wand.Spell;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;

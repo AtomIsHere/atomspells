@@ -1,4 +1,4 @@
-package com.github.atomishere.atomspells.wand;
+package com.github.atomishere.atomspells.spells;
 
 import com.github.atomishere.atomspells.AtomSpells;
 import net.kyori.adventure.text.Component;

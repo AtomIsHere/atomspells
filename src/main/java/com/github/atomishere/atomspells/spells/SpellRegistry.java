@@ -1,4 +1,4 @@
-package com.github.atomishere.atomspells.wand;
+package com.github.atomishere.atomspells.spells;
 
 import java.util.HashMap;
 import java.util.Map;
