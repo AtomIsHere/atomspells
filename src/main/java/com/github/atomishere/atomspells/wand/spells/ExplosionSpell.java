@@ -19,7 +19,11 @@ public class ExplosionSpell extends Spell {
 
     @Override
     public void performSpell(Player caster) {
-        RayCaster.RayResult ray = RayCaster.castRay(caster.getEyeLocation(), 10.0D, true, caster);
+        RayCaster.RayResult ray = RayCaster.at(caster.getEyeLocation())
+                .maxDistance(10.0D)
+                .showTrail(true)
+                .entityFilter(entity -> entity != caster)
+                .cast();
 
         if(!ray.isHit()) {
             caster.sendMessage("You didn't hit anything!");
