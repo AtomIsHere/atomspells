@@ -2,18 +2,15 @@ package com.github.atomishere.atomspells.spells;
 
 import com.github.atomishere.atomspells.AtomSpells;
 import com.github.atomishere.atomspells.RayCaster;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 public class HealingSpell extends Spell {
     private final AtomSpells plugin;
 
-    public HealingSpell(AtomSpells plugin) {
-        super("Healing Circle");
+    public HealingSpell(NamespacedKey spellId, AtomSpells plugin) {
+        super(spellId, "Healing Circle");
 
         this.plugin = plugin;
     }

@@ -1,17 +1,21 @@
-package com.github.atomishere.atomspells.spells;
+package com.github.atomishere.atomspells.wand;
 
 import com.github.atomishere.atomspells.AtomSpells;
+import com.github.atomishere.atomspells.spells.SpellKeys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -29,8 +33,30 @@ public class WandManager implements Listener {
     }
 
     public boolean isWand(ItemStack item) {
-        Boolean wand = item.getItemMeta().getPersistentDataContainer().get(wandTag, PersistentDataType.BOOLEAN);
-        return wand != null && wand;
+        return item.getItemMeta().getPersistentDataContainer().has(wandTag);
+    }
+
+    public Optional<Wand> getWand(ItemStack item) {
+        return Optional.ofNullable(item.getItemMeta().getPersistentDataContainer().get(wandTag, Wand.WAND_DATA_TYPE));
+    }
+
+    private ItemStack createTestWand() {
+        ItemStack wandStack = new ItemStack(Material.STICK);
+
+        Wand wand = new Wand();
+
+        wand.addSpell((byte) 0x0, plugin.getSpellRegistry()
+                .getSpell(SpellKeys.EXPLOSION_SPELL_KEY)
+                .orElseThrow(() -> new IllegalStateException("Explosion spell is null")));
+        wand.addSpell((byte) 0x1, plugin.getSpellRegistry()
+                .getSpell(SpellKeys.HEALING_SPELL_KEY)
+                .orElseThrow(() -> new IllegalStateException("Healing spell is null")));
+
+        ItemMeta meta = wandStack.getItemMeta();
+        meta.getPersistentDataContainer().set(wandTag, Wand.WAND_DATA_TYPE, wand);
+        wandStack.setItemMeta(meta);
+
+        return wandStack;
     }
 
     private byte convertToSpellTag(List<Boolean> clicks) {
@@ -99,13 +125,28 @@ public class WandManager implements Listener {
 
             List<Boolean> clicks = casts.get(player.getUniqueId());
             if(clicks.size() == 3) {
+                Wand wand = getWand(item).orElseThrow(() -> new IllegalStateException("Wand is null"));
+
                 byte spellTag = convertToSpellTag(clicks);
                 player.sendMessage("Spell tag: " + spellTag);
 
-                plugin.getSpellRegistry().getSpell(spellTag).ifPresent(spell -> spell.performSpell(player));
+                wand.getSpell(spellTag).ifPresentOrElse(
+                        spellId -> plugin.getSpellRegistry()
+                                .getSpell(spellId)
+                                .orElseThrow(() -> new IllegalStateException("Spell is null"))
+                                .performSpell(player),
+                        () -> plugin.getActionHud()
+                                .sendMessage(player, Component.text("No spell on that slot!")
+                                        .color(NamedTextColor.RED), 20)
+                );
 
                 clicks.clear();
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().getInventory().addItem(createTestWand());
     }
 }

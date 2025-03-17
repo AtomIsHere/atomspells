@@ -3,6 +3,7 @@ package com.github.atomishere.atomspells.spells;
 import com.github.atomishere.atomspells.ManaManager;
 import com.github.atomishere.atomspells.RayCaster;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -10,8 +11,8 @@ import org.bukkit.entity.Player;
 public class ExplosionSpell extends Spell {
     private final ManaManager manaManager;
 
-    public ExplosionSpell(ManaManager manaManager) {
-        super("Explosion Spell");
+    public ExplosionSpell(NamespacedKey spellId, ManaManager manaManager) {
+        super(spellId, "Explosion Spell");
 
         this.manaManager = manaManager;
     }

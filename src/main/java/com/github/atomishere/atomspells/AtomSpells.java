@@ -1,9 +1,10 @@
 package com.github.atomishere.atomspells;
 
-import com.github.atomishere.atomspells.spells.HealingSpell;
-import com.github.atomishere.atomspells.spells.SpellRegistry;
-import com.github.atomishere.atomspells.spells.WandManager;
 import com.github.atomishere.atomspells.spells.ExplosionSpell;
+import com.github.atomishere.atomspells.spells.HealingSpell;
+import com.github.atomishere.atomspells.spells.SpellKeys;
+import com.github.atomishere.atomspells.spells.SpellRegistry;
+import com.github.atomishere.atomspells.wand.WandManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -11,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public class AtomSpells extends JavaPlugin {
+    public static final String PLUGIN_NAME = "AtomSpells";
+
     private final ManaManager manaManager = new ManaManager(this);
     private final WandManager wandManager = new WandManager(this);
     private final ActionHud actionHud = new ActionHud();
@@ -32,10 +35,15 @@ public class AtomSpells extends JavaPlugin {
         return actionHud;
     }
 
+    private void registerSpells() {
+        spellRegistry.registerSpell(new ExplosionSpell(SpellKeys.EXPLOSION_SPELL_KEY, manaManager));
+        spellRegistry.registerSpell(new HealingSpell(SpellKeys.HEALING_SPELL_KEY, this));
+    }
+
     @Override
     public void onEnable() {
-        spellRegistry.registerSpell((byte) 0x0, new ExplosionSpell(manaManager));
-        spellRegistry.registerSpell((byte) 0x1, new HealingSpell(this));
+        registerSpells();
+
         actionHud.addElement(player -> Component.text("★ Mana: ")
                 .append(Component.text(Math.round(manaManager.getMana(player))))
                 .append(Component.text("/"))
