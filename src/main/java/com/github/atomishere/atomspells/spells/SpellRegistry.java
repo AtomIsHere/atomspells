@@ -13,6 +13,10 @@ public class SpellRegistry {
         spells.put(spell.getSpellId(), spell);
     }
 
+    public boolean spellRegistered(NamespacedKey spellId) {
+        return spells.containsKey(spellId);
+    }
+
     public Optional<Spell> getSpell(NamespacedKey spellId) {
         return Optional.ofNullable(spells.get(spellId));
     }

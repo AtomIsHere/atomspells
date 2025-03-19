@@ -6,6 +6,7 @@ import com.github.atomishere.atomspells.AtomSpells;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -19,15 +20,19 @@ public class WandMenu implements InventoryHolder {
     private static final String RIGHT_HEAD_ID = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2NiODgyMjVlZTRhYjM5ZjdjYmY1ODFmMjJjYmYwOGJkY2MzMzg4NGYxZmY3NDc2ODkzMTI4NDE1MTZjMzQ1In19fQ==";
 
     private final Inventory inventory;
+    private final ItemStack wandItem;
 
     private final ItemStack leftHead;
     private final ItemStack rightHead;
 
-    public WandMenu(AtomSpells plugin) {
+    public WandMenu(AtomSpells plugin, ItemStack wandItem) {
         this.inventory = plugin.getServer().createInventory(this, 36, Component.text("Wand"));
+        this.wandItem = wandItem;
 
         this.leftHead = createHead(LEFT_HEAD_ID);
         this.rightHead = createHead(RIGHT_HEAD_ID);
+
+        Wand wand = plugin.getWandManager().getWand(wandItem).orElseThrow(() -> new IllegalArgumentException("Wand is null"));
 
         int invenPos = 0;
         for(byte i = 0; i < 8; i++) {
@@ -38,6 +43,12 @@ public class WandMenu implements InventoryHolder {
                 invenPos++;
             }
 
+            final int invenPosFinal = invenPos;
+            wand.getSpell(i)
+                    .map(plugin.getItemManager()::createSpellItem)
+                    .map(opt -> opt.orElseThrow(() -> new IllegalStateException("Spell item is null")))
+                    .ifPresent(item -> inventory.setItem(invenPosFinal, item));
+
             invenPos++;
 
             if(i % 2 == 0) {
@@ -45,6 +56,10 @@ public class WandMenu implements InventoryHolder {
                 invenPos++;
             }
         }
+    }
+
+    public ItemStack getWandItem() {
+        return wandItem;
     }
 
     @Override

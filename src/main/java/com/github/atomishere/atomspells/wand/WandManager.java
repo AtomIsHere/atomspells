@@ -13,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
@@ -38,6 +37,12 @@ public class WandManager implements Listener {
 
     public Optional<Wand> getWand(ItemStack item) {
         return Optional.ofNullable(item.getItemMeta().getPersistentDataContainer().get(wandTag, Wand.WAND_DATA_TYPE));
+    }
+
+    public void makeWand(ItemStack item, Wand wand) {
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(wandTag, Wand.WAND_DATA_TYPE, wand);
+        item.setItemMeta(meta);
     }
 
     private ItemStack createTestWand() {
@@ -117,7 +122,7 @@ public class WandManager implements Listener {
         ItemStack offItem = player.getInventory().getItemInOffHand();
 
         if(offItem.getItemMeta() != null && isWand(offItem) && event.getAction() == Action.RIGHT_CLICK_AIR) {
-            WandMenu menu = new WandMenu(plugin);
+            WandMenu menu = new WandMenu(plugin, offItem);
 
             player.openInventory(menu.getInventory());
         } else if(item != null && item.getItemMeta() != null && isWand(item)) {
