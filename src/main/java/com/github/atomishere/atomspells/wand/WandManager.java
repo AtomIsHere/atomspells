@@ -114,7 +114,13 @@ public class WandManager implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
-        if(item != null && isWand(item)) {
+        ItemStack offItem = player.getInventory().getItemInOffHand();
+
+        if(offItem.getItemMeta() != null && isWand(offItem) && event.getAction() == Action.RIGHT_CLICK_AIR) {
+            WandMenu menu = new WandMenu(plugin);
+
+            player.openInventory(menu.getInventory());
+        } else if(item != null && item.getItemMeta() != null && isWand(item)) {
             Action action = event.getAction();
 
             if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
@@ -143,10 +149,5 @@ public class WandManager implements Listener {
                 clicks.clear();
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().getInventory().addItem(createTestWand());
     }
 }
