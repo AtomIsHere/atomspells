@@ -6,10 +6,12 @@ import org.bukkit.NamespacedKey;
 public final class SpellKeys {
     public static final NamespacedKey HEALING_SPELL_KEY;
     public static final NamespacedKey EXPLOSION_SPELL_KEY;
+    public static final NamespacedKey ZOMBIE_SPAWN_SPELL_KEY;
 
     static {
         HEALING_SPELL_KEY = createSpellKey("healing_spell");
         EXPLOSION_SPELL_KEY = createSpellKey("explosion_spell");
+        ZOMBIE_SPAWN_SPELL_KEY = createSpellKey("zombie_spawn_spell");
     }
 
     public static NamespacedKey createSpellKey(String id) {

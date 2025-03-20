@@ -2,10 +2,7 @@ package com.github.atomishere.atomspells;
 
 import com.github.atomishere.atomspells.items.ItemManager;
 import com.github.atomishere.atomspells.items.SpellItem;
-import com.github.atomishere.atomspells.spells.ExplosionSpell;
-import com.github.atomishere.atomspells.spells.HealingSpell;
-import com.github.atomishere.atomspells.spells.SpellKeys;
-import com.github.atomishere.atomspells.spells.SpellRegistry;
+import com.github.atomishere.atomspells.spells.*;
 import com.github.atomishere.atomspells.wand.WandManager;
 import com.github.atomishere.atomspells.wand.WandMenuListener;
 import net.kyori.adventure.text.Component;
@@ -55,6 +52,7 @@ public class AtomSpells extends JavaPlugin {
     private void registerSpells() {
         spellRegistry.registerSpell(new ExplosionSpell(SpellKeys.EXPLOSION_SPELL_KEY, manaManager));
         spellRegistry.registerSpell(new HealingSpell(SpellKeys.HEALING_SPELL_KEY, this));
+        spellRegistry.registerSpell(new ZombieSpawnSpell(SpellKeys.ZOMBIE_SPAWN_SPELL_KEY, this));
     }
 
     private void registerSpellItems() {
@@ -71,6 +69,13 @@ public class AtomSpells extends JavaPlugin {
                         (shapedRecipe -> shapedRecipe.shape("BAB", "ACA", "BAB")
                                 .setIngredient('A', Material.GOLDEN_APPLE)
                                 .setIngredient('B', Material.GOLDEN_CARROT)
+                                .setIngredient('C', itemManager.getEmptySpellScroll()))));
+        itemManager.registerSpellItem(SpellKeys.ZOMBIE_SPAWN_SPELL_KEY,
+                new SpellItem(Component.text("Zombie Spell Scroll"),
+                        Collections.emptyList(),
+                        (shapedRecipe -> shapedRecipe.shape("BAB", "ACA", "BAB")
+                                .setIngredient('A', Material.ROTTEN_FLESH)
+                                .setIngredient('B', Material.IRON_INGOT)
                                 .setIngredient('C', itemManager.getEmptySpellScroll()))));
     }
 
