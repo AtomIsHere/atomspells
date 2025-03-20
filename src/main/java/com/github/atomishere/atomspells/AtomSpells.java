@@ -64,14 +64,14 @@ public class AtomSpells extends JavaPlugin {
                         (shapedRecipe -> shapedRecipe.shape("BAB", "ACA", "BAB")
                                 .setIngredient('A', Material.TNT)
                                 .setIngredient('B', Material.GUNPOWDER)
-                                .setIngredient('C', Material.PAPER))));
+                                .setIngredient('C', itemManager.getEmptySpellScroll()))));
         itemManager.registerSpellItem(SpellKeys.HEALING_SPELL_KEY,
                 new SpellItem(Component.text("Healing Spell Scroll"),
                         Collections.emptyList(),
                         (shapedRecipe -> shapedRecipe.shape("BAB", "ACA", "BAB")
                                 .setIngredient('A', Material.GOLDEN_APPLE)
                                 .setIngredient('B', Material.GOLDEN_CARROT)
-                                .setIngredient('C', Material.PAPER))));
+                                .setIngredient('C', itemManager.getEmptySpellScroll()))));
     }
 
     private void registerScrollSpawnChances() {
