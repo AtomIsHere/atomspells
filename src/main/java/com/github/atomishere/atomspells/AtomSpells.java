@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.loot.LootTables;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -73,6 +74,20 @@ public class AtomSpells extends JavaPlugin {
                                 .setIngredient('C', Material.PAPER))));
     }
 
+    private void registerScrollSpawnChances() {
+        itemManager.setScrollSpawnChance(LootTables.BURIED_TREASURE.getKey(), 0.5D);
+
+        itemManager.setScrollSpawnChance(LootTables.ANCIENT_CITY.getKey(), 0.3D);
+
+        itemManager.setScrollSpawnChance(LootTables.DESERT_PYRAMID.getKey(), 0.25D);
+        itemManager.setScrollSpawnChance(LootTables.JUNGLE_TEMPLE.getKey(), 0.25D);
+
+        itemManager.setScrollSpawnChance(LootTables.SIMPLE_DUNGEON.getKey(), 0.1D);
+        itemManager.setScrollSpawnChance(LootTables.STRONGHOLD_CORRIDOR.getKey(), 0.15D);
+        itemManager.setScrollSpawnChance(LootTables.STRONGHOLD_CROSSING.getKey(), 0.15D);
+        itemManager.setScrollSpawnChance(LootTables.STRONGHOLD_LIBRARY.getKey(), 0.15D);
+    }
+
     @Override
     public void onEnable() {
         registerSpells();
@@ -88,7 +103,10 @@ public class AtomSpells extends JavaPlugin {
         );
 
         Bukkit.getPluginManager().registerEvents(wandManager, this);
+        Bukkit.getPluginManager().registerEvents(itemManager, this);
         Bukkit.getPluginManager().registerEvents(new WandMenuListener(itemManager, wandManager), this);
+
+        registerScrollSpawnChances();
 
         this.manaTask = Bukkit.getServer().getScheduler().runTaskTimer(this, manaManager, 0, 20);
         this.actionHudTask = Bukkit.getServer().getScheduler().runTaskTimer(this, actionHud, 0, 1);

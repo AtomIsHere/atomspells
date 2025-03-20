@@ -3,28 +3,48 @@ package com.github.atomishere.atomspells.items;
 import com.github.atomishere.atomspells.AtomSpells;
 import com.github.atomishere.atomspells.spells.Spell;
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.loot.LootTable;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class ItemManager {
+public class ItemManager implements Listener {
     private final AtomSpells plugin;
     private final NamespacedKey spellItemKey;
 
     private final Map<NamespacedKey, SpellItem> spellItems = new HashMap<>();
 
+    private final ItemStack emptySpellScroll;
+    private final Map<NamespacedKey, Double> scrollSpawnChance = new HashMap<>();
+
+    @SuppressWarnings("UnstableApiUsage")
     public ItemManager(AtomSpells plugin) {
         this.plugin = plugin;
         this.spellItemKey = new NamespacedKey(plugin, "spell_item");
+
+        this.emptySpellScroll = new ItemStack(Material.PAPER);
+
+        ItemMeta emptySpellScrollMeta = emptySpellScroll.getItemMeta();
+        emptySpellScrollMeta.customName(Component.text("Empty Spell Scroll"));
+        emptySpellScrollMeta.setRarity(ItemRarity.RARE);
+        emptySpellScroll.setItemMeta(emptySpellScrollMeta);
+
+        emptySpellScroll.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     public void registerSpellItem(NamespacedKey spellKey, SpellItem item) {
@@ -50,6 +70,33 @@ public class ItemManager {
 
     public boolean isSpellItem(ItemStack item) {
         return item.getItemMeta().getPersistentDataContainer().has(spellItemKey);
+    }
+
+    public ItemStack getEmptySpellScroll() {
+        return emptySpellScroll.clone();
+    }
+
+    public void setScrollSpawnChance(NamespacedKey lootTableKey, double chance) {
+        scrollSpawnChance.put(lootTableKey, chance);
+    }
+
+    @EventHandler
+    public void onGeneration(ChunkPopulateEvent event) {
+        BlockState[] tileEntities = event.getChunk().getTileEntities();
+
+        for(BlockState state : tileEntities) {
+            if(state.getType() == Material.CHEST) {
+                Chest chest = (Chest) state.getBlock().getState();
+                LootTable lootTable = chest.getLootTable();
+
+                if(lootTable != null && scrollSpawnChance.containsKey(lootTable.getKey())) {
+                    double chance = scrollSpawnChance.get(lootTable.getKey());
+                    if(Math.random() < chance) {
+                        chest.getInventory().addItem(getEmptySpellScroll());
+                    }
+                }
+            }
+        }
     }
 
     @SuppressWarnings("UnstableApiUsage")
