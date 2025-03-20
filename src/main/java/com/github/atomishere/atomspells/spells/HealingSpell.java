@@ -29,7 +29,7 @@ public class HealingSpell extends Spell {
             return;
         }
 
-        if(plugin.getManaManager().getMana(caster) < 10) {
+        if(plugin.getManaManager().getMana(caster) < 50) {
             caster.sendMessage("You don't have enough mana!");
             return;
         }
